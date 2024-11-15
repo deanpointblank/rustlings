@@ -5,6 +5,7 @@
 // functionality using iterators. Try to not use imperative loops (for/while).
 
 use std::collections::HashMap;
+use std::ops::Index;
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum Progress {
@@ -28,6 +29,12 @@ fn count_for(map: &HashMap<String, Progress>, value: Progress) -> usize {
 fn count_iterator(map: &HashMap<String, Progress>, value: Progress) -> usize {
     // `map` is a hash map with `String` keys and `Progress` values.
     // map = { "variables1": Complete, "from_str": None, … }
+    let result :usize = map.iter().fold(0, |acc, prog| {
+        if *prog.1 == value {acc + 1} else {acc}
+    });
+
+    result
+
 }
 
 fn count_collection_for(collection: &[HashMap<String, Progress>], value: Progress) -> usize {
@@ -48,6 +55,13 @@ fn count_collection_iterator(collection: &[HashMap<String, Progress>], value: Pr
     // `collection` is a slice of hash maps.
     // collection = [{ "variables1": Complete, "from_str": None, … },
     //               { "variables2": Complete, … }, … ]
+    let result :usize = collection
+        .iter()
+        .fold(0, |acc, prog| {
+       acc + prog.values().filter(|&prog_val| *prog_val == value).count()
+    });
+
+    result
 }
 
 fn main() {

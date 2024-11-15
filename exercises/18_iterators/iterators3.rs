@@ -14,8 +14,8 @@ fn divide(a: i64, b: i64) -> Result<i64, DivisionError> {
     let remainder = (a,  b);
     match remainder {
         (_, 0) => Err(DivisionError::DivideByZero),
+        (a, b) if a.checked_div(b).is_none()  => Err(DivisionError::IntegerOverflow),
         (a, b) if a % b == 0 => Ok(a / b),
-        (a, _) if i64::overflowing_abs(a) => Err(DivisionError::IntegerOverflow),
         (_, _) => Err(DivisionError::NotDivisible)
     }
 }
